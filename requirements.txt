@@ -1,0 +1,6 @@
+Django>=5.0,<6.0
+django-jazzmin>=2.4
+psycopg2-binary>=2.9  # atau ganti dengan mysqlclient jika pakai MySQL
+python-dotenv>=1.0
+Pillow>=10.0
+mysqlclient>=2.1  # Hapus ini jika tidak menggunakan MySQL
