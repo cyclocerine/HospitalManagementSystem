@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">Dashboard Admin</h1>
+        <p class="text-gray-600 mb-6">Selamat datang di panel administrasi rumah sakit</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <!-- Statistik Cards -->
+            <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
+                <h3 class="text-gray-600 text-sm font-semibold">Total Pasien</h3>
+                <p class="text-3xl font-bold text-blue-600 mt-2">1,245</p>
+            </div>
+            <div class="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
+                <h3 class="text-gray-600 text-sm font-semibold">Dokter Aktif</h3>
+                <p class="text-3xl font-bold text-green-600 mt-2">42</p>
+            </div>
+            <div class="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
+                <h3 class="text-gray-600 text-sm font-semibold">Rawat Inap</h3>
+                <p class="text-3xl font-bold text-yellow-600 mt-2">156</p>
+            </div>
+            <div class="bg-red-50 p-6 rounded-lg border-l-4 border-red-500">
+                <h3 class="text-gray-600 text-sm font-semibold">Pendapatan</h3>
+                <p class="text-3xl font-bold text-red-600 mt-2">Rp 2.3M</p>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <a href="/admin/" class="bg-primary text-white p-6 rounded-lg hover:shadow-lg transition">
+                <h3 class="text-xl font-semibold">Manajemen Data</h3>
+                <p class="mt-2 text-blue-100">Kelola pasien, dokter, dan data rumah sakit</p>
+            </a>
+            <a href="/admin/" class="bg-green-500 text-white p-6 rounded-lg hover:shadow-lg transition">
+                <h3 class="text-xl font-semibold">Laporan</h3>
+                <p class="mt-2 text-green-100">Lihat laporan keuangan dan statistik</p>
+            </a>
+            <a href="/admin/" class="bg-purple-500 text-white p-6 rounded-lg hover:shadow-lg transition">
+                <h3 class="text-xl font-semibold">Pengaturan</h3>
+                <p class="mt-2 text-purple-100">Konfigurasi sistem rumah sakit</p>
+            </a>
+        </div>
+
+        <div class="mt-8">
+            <a href="/accounts/logout/" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition">Logout</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

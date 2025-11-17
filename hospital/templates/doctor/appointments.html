@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}Janji Temu Pasien - Dokter{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Janji Temu Pasien</h1>
+                <p class="text-gray-600">Kelola jadwal pemeriksaan pasien Anda</p>
+            </div>
+            <a href="{% url 'doctor_dashboard' %}" class="text-blue-600 hover:text-blue-800 font-semibold">
+                ← Kembali ke Dashboard
+            </a>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-yellow-500">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-gray-600 text-sm font-semibold">Menunggu Pemeriksaan</p>
+                        <p class="text-3xl font-bold text-gray-800 mt-2">{{ pending_count }}</p>
+                    </div>
+                    <span class="text-4xl">⏳</span>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-gray-600 text-sm font-semibold">Selesai Diperiksa</p>
+                        <p class="text-3xl font-bold text-gray-800 mt-2">{{ completed_count }}</p>
+                    </div>
+                    <span class="text-4xl">✅</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter & Search -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <form method="get" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Search -->
+                    <div class="md:col-span-2">
+                        <input type="text" name="q" value="{{ search_query }}" placeholder="Cari nama pasien..." 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                    <!-- Status Filter -->
+                    <div>
+                        <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="all" {% if status_filter == 'all' %}selected{% endif %}>Semua Status</option>
+                            <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Menunggu</option>
+                            <option value="completed" {% if status_filter == 'completed' %}selected{% endif %}>Selesai</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-semibold">
+                        Filter
+                    </button>
+                    {% if search_query or status_filter != 'all' %}
+                        <a href="{% url 'doctor:appointments' %}" class="bg-gray-300 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-400 transition font-semibold">
+                            Reset
+                        </a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+
+        <!-- Appointments Table -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            {% if appointments %}
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-100 border-b border-gray-300">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No.</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama Pasien</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tanggal Pemeriksaan</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Diagnosis</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in appointments %}
+                                <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
+                                    <td class="px-6 py-4 text-sm text-gray-700">{{ forloop.counter }}</td>
+                                    <td class="px-6 py-4 text-sm font-medium text-gray-800">
+                                        {{ appointment.patient.name }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-700">
+                                        {{ appointment.examination_date|date:"d M Y" }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-700 max-w-xs truncate">
+                                        {% if appointment.diagnosis %}
+                                            {{ appointment.diagnosis }}
+                                        {% else %}
+                                            <span class="text-gray-400 italic">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm">
+                                        {% if appointment.diagnosis %}
+                                            <span class="px-3 py-1 rounded-full text-white text-xs font-semibold bg-green-500">
+                                                ✓ Selesai
+                                            </span>
+                                        {% else %}
+                                            <span class="px-3 py-1 rounded-full text-white text-xs font-semibold bg-yellow-500">
+                                                ⏳ Pending
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm">
+                                        <a href="{% url 'doctor:patient_detail' appointment.patient.id %}" 
+                                           class="text-blue-600 hover:text-blue-800 font-semibold">
+                                            Lihat Detail →
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="p-8 text-center">
+                    <p class="text-gray-600 text-lg mb-2">Tidak ada janji temu</p>
+                    {% if search_query or status_filter != 'all' %}
+                        <p class="text-gray-500 text-sm">Coba ubah filter pencarian Anda</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Back Link -->
+        <div class="mt-8">
+            <a href="{% url 'doctor_dashboard' %}" class="text-blue-600 hover:text-blue-800 font-semibold">
+                ← Kembali ke Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

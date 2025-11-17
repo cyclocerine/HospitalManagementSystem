@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 flex items-center justify-center">
+    <div class="w-full max-w-2xl bg-white rounded-lg shadow-2xl overflow-hidden">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-12">
+            <h1 class="text-4xl font-bold text-white mb-2">Daftar Sebagai Dokter</h1>
+            <p class="text-blue-100">Bergabunglah dengan tim medis profesional kami</p>
+        </div>
+
+        <!-- Form -->
+        <div class="p-8">
+            <!-- Messages -->
+            {% if messages %}
+            <div class="mb-6">
+                {% for message in messages %}
+                <div class="rounded-lg p-4 mb-4 {% if message.tags %}bg-{{ message.tags }}-50 border border-{{ message.tags }}-200 text-{{ message.tags }}-800{% else %}bg-blue-50 border border-blue-200 text-blue-800{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+
+                <!-- Section 1: Account Info -->
+                <div class="border-b border-gray-200 pb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">📋 Informasi Akun</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Username -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">Username *</label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                            <div class="text-red-600 text-sm mt-2">
+                                {% for error in form.username.errors %}
+                                <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">Email *</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                            <div class="text-red-600 text-sm mt-2">
+                                {% for error in form.email.errors %}
+                                <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <!-- Password -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">Password *</label>
+                            {{ form.password1 }}
+                            {% if form.password1.errors %}
+                            <div class="text-red-600 text-sm mt-2">
+                                {% for error in form.password1.errors %}
+                                <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">Konfirmasi Password *</label>
+                            {{ form.password2 }}
+                            {% if form.password2.errors %}
+                            <div class="text-red-600 text-sm mt-2">
+                                {% for error in form.password2.errors %}
+                                <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Personal Info -->
+                <div class="border-b border-gray-200 pb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">👤 Informasi Pribadi</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- First Name -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">Nama Depan *</label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                            <div class="text-red-600 text-sm mt-2">
+                                {% for error in form.first_name.errors %}
+                                <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Last Name -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">Nama Belakang</label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                            <div class="text-red-600 text-sm mt-2">
+                                {% for error in form.last_name.errors %}
+                                <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <!-- Date of Birth -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">Tanggal Lahir *</label>
+                            {{ form.date_of_birth }}
+                            {% if form.date_of_birth.errors %}
+                            <div class="text-red-600 text-sm mt-2">
+                                {% for error in form.date_of_birth.errors %}
+                                <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Phone -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">Nomor Telepon *</label>
+                            {{ form.phone }}
+                            {% if form.phone.errors %}
+                            <div class="text-red-600 text-sm mt-2">
+                                {% for error in form.phone.errors %}
+                                <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="mt-6">
+                        <label class="block text-gray-700 font-semibold mb-3">Jenis Kelamin *</label>
+                        <div class="flex gap-6">
+                            {% for radio in form.gender %}
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                {{ radio.tag }}
+                                <span>{{ radio.choice_label }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                        {% if form.gender.errors %}
+                        <div class="text-red-600 text-sm mt-2">
+                            {% for error in form.gender.errors %}
+                            <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Section 3: Medical Credentials -->
+                <div class="border-b border-gray-200 pb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">🏥 Kredensial Medis</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Specialty -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">Spesialisasi *</label>
+                            {{ form.specialty }}
+                            {% if form.specialty.errors %}
+                            <div class="text-red-600 text-sm mt-2">
+                                {% for error in form.specialty.errors %}
+                                <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Position -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">Posisi *</label>
+                            {{ form.position }}
+                            {% if form.position.errors %}
+                            <div class="text-red-600 text-sm mt-2">
+                                {% for error in form.position.errors %}
+                                <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <!-- SIP Number -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">No. SIP (Opsional)</label>
+                            {{ form.sip_number }}
+                            {% if form.sip_number.errors %}
+                            <div class="text-red-600 text-sm mt-2">
+                                {% for error in form.sip_number.errors %}
+                                <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- STR Number -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-3">No. STR (Opsional)</label>
+                            {{ form.str_number }}
+                            {% if form.str_number.errors %}
+                            <div class="text-red-600 text-sm mt-2">
+                                {% for error in form.str_number.errors %}
+                                <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Unit -->
+                    <div class="mt-6">
+                        <label class="block text-gray-700 font-semibold mb-3">Unit / Departemen *</label>
+                        {{ form.unit }}
+                        {% if form.unit.errors %}
+                        <div class="text-red-600 text-sm mt-2">
+                            {% for error in form.unit.errors %}
+                            <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex gap-4">
+                    <button 
+                        type="submit" 
+                        class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-bold hover:from-blue-700 hover:to-indigo-700 transition shadow-lg"
+                    >
+                        ✓ Daftar Sebagai Dokter
+                    </button>
+                </div>
+
+                <!-- Login Link -->
+                <div class="text-center pt-6 border-t border-gray-200">
+                    <p class="text-gray-600">Sudah punya akun? <a href="{% url 'login' %}" class="text-blue-600 font-semibold hover:text-blue-800">Masuk di sini</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

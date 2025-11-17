@@ -1,5 +1,5 @@
 from .patient import Patient
-from .doctor import Doctor
+from .doctor import Doctor, DoctorAvailability, DoctorLeave
 from .room import Room
 from .supplier import Supplier
 from .medicine import Medicine

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Konfirmasi Appointment - {{ patient.name }}{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8 px-4">
+    <div class="max-w-2xl mx-auto">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Konfirmasi Appointment</h1>
+            <p class="text-gray-600 mt-2">Setujui atau tolak appointment pasien</p>
+        </div>
+
+        {% if messages %}
+        <div class="mb-6">
+            {% for message in messages %}
+            <div class="p-4 rounded-lg bg-blue-50 text-blue-800 border border-blue-200">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Patient Information -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Data Pasien</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <p class="text-gray-600 text-sm">Nama Pasien</p>
+                    <p class="text-gray-900 font-medium">{{ patient.name }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600 text-sm">Nomor Telepon</p>
+                    <p class="text-gray-900 font-medium">{{ patient.phone }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600 text-sm">Golongan Darah</p>
+                    <p class="text-gray-900 font-medium">{{ patient.blood_type }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600 text-sm">Status BPJS</p>
+                    <p class="text-gray-900 font-medium">{{ patient.bpjs_status|default:"Tidak ada" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointment Information -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Informasi Appointment</h2>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <p class="text-gray-600 text-sm">Tanggal</p>
+                    <p class="text-gray-900 font-medium">{{ appointment.examination_date|date:"d F Y" }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600 text-sm">Waktu</p>
+                    <p class="text-gray-900 font-medium">{{ appointment.examination_time }}</p>
+                </div>
+            </div>
+            <div>
+                <p class="text-gray-600 text-sm">Keluhan/Catatan</p>
+                <p class="text-gray-900 font-medium whitespace-pre-wrap">{{ appointment.notes|default:"Tidak ada catatan" }}</p>
+            </div>
+        </div>
+
+        <!-- Confirmation Form -->
+        <form method="POST" class="bg-white rounded-lg shadow p-6">
+            {% csrf_token %}
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-900 mb-3">Status Konfirmasi</label>
+                <div class="space-y-3">
+                    {% for value, label in form.confirmation_status.field.choices %}
+                    <div class="flex items-center">
+                        <input type="radio" name="confirmation_status" value="{{ value }}" id="status_{{ value }}" required
+                            class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-2 focus:ring-blue-500 cursor-pointer">
+                        <label for="status_{{ value }}" class="ml-3 block text-sm font-medium text-gray-700 cursor-pointer">
+                            {{ label }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if form.confirmation_status.errors %}
+                <div class="text-red-600 text-sm mt-2">{{ form.confirmation_status.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-6">
+                <label for="{{ form.rejection_reason.id_for_label }}" class="block text-sm font-medium text-gray-900 mb-2">
+                    Alasan Penolakan (jika ditolak)
+                </label>
+                {{ form.rejection_reason }}
+                {% if form.rejection_reason.errors %}
+                <div class="text-red-600 text-sm mt-2">{{ form.rejection_reason.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="flex gap-4">
+                <button type="submit" class="flex-1 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition">
+                    Simpan Keputusan
+                </button>
+                <a href="{% url 'doctor_appointments' %}" class="flex-1 px-6 py-3 bg-gray-200 text-gray-900 font-medium rounded-lg hover:bg-gray-300 transition text-center">
+                    Batal
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

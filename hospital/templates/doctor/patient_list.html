@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}Daftar Pasien - Dokter{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800 mb-2">Daftar Pasien</h1>
+                    <p class="text-gray-600">Total: <span class="font-semibold text-blue-600">{{ total_patients }}</span> pasien</p>
+                </div>
+                <a href="{% url 'doctor:appointments' %}" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-medium">
+                    Lihat Janji Temu
+                </a>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <form method="get" class="flex gap-4">
+                <input type="text" name="q" value="{{ search_query }}" placeholder="Cari nama pasien..." 
+                       class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                    Cari
+                </button>
+                {% if search_query %}
+                    <a href="{% url 'doctor:patient_list' %}" class="bg-gray-300 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-400 transition">
+                        Reset
+                    </a>
+                {% endif %}
+            </form>
+        </div>
+
+        <!-- Patients Table -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            {% if patients %}
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-100 border-b border-gray-300">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No.</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama Pasien</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No. Telepon</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Golongan Darah</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status BPJS</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for patient in patients %}
+                                <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
+                                    <td class="px-6 py-4 text-sm text-gray-700">{{ forloop.counter }}</td>
+                                    <td class="px-6 py-4 text-sm font-medium text-gray-800">{{ patient.name }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-700">{{ patient.phone }}</td>
+                                    <td class="px-6 py-4 text-sm">
+                                        <span class="px-3 py-1 rounded-full text-white text-xs font-semibold bg-red-500">
+                                            {{ patient.blood_type }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm">
+                                        {% if patient.bpjs_status %}
+                                            <span class="px-3 py-1 rounded-full text-white text-xs font-semibold bg-green-500">
+                                                Aktif
+                                            </span>
+                                        {% else %}
+                                            <span class="px-3 py-1 rounded-full text-white text-xs font-semibold bg-gray-500">
+                                                Tidak Aktif
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm">
+                                        <a href="{% url 'doctor:patient_detail' patient.id %}" 
+                                           class="text-blue-600 hover:text-blue-800 font-semibold">
+                                            Lihat Detail →
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="p-8 text-center">
+                    <p class="text-gray-600 text-lg">
+                        {% if search_query %}
+                            Pasien tidak ditemukan dengan pencarian "{{ search_query }}"
+                        {% else %}
+                            Belum ada pasien
+                        {% endif %}
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Back Button -->
+        <div class="mt-8">
+            <a href="{% url 'doctor_dashboard' %}" class="text-blue-600 hover:text-blue-800 font-semibold">
+                ← Kembali ke Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

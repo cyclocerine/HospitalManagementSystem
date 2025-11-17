@@ -88,8 +88,17 @@ class ScheduleAdmin(admin.ModelAdmin):
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'payment_date', 'method', 'total_amount')
-    list_filter = ('method', 'payment_date')
+    list_display = ('invoice_number', 'patient', 'amount', 'paid_amount', 'status', 'method', 'created_at')
+    list_filter = ('status', 'method', 'created_at')
+    search_fields = ('patient__name', 'invoice_number')
+    readonly_fields = ('invoice_number', 'created_at', 'updated_at')
+    fieldsets = (
+        (None, {'fields': ('invoice_number', 'patient', 'medical_record')}),
+        ('Pembayaran', {'fields': ('service_name', 'amount', 'paid_amount', 'status', 'method')}),
+        ('Tanggal', {'fields': ('due_date', 'payment_date')}),
+        ('Catatan', {'fields': ('notes',)}),
+        ('Sistem', {'fields': ('created_at', 'updated_at'), 'classes': ('collapse',)}),
+    )
 
 @admin.register(MedicalTransaction)
 class MedicalTransactionAdmin(admin.ModelAdmin):

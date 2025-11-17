@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Tambah Diagnosis - {{ patient.name }}{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8 px-4">
+    <div class="max-w-2xl mx-auto">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Tambah Diagnosis & Rencana Pengobatan</h1>
+            <p class="text-gray-600 mt-2">Masukkan hasil pemeriksaan pasien</p>
+        </div>
+
+        {% if messages %}
+        <div class="mb-6">
+            {% for message in messages %}
+            <div class="p-4 rounded-lg bg-blue-50 text-blue-800 border border-blue-200">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Patient Info -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-lg font-bold text-gray-900 mb-4">Data Pasien</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <p class="text-gray-600 text-sm">Nama</p>
+                    <p class="text-gray-900 font-medium">{{ patient.name }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600 text-sm">Telepon</p>
+                    <p class="text-gray-900 font-medium">{{ patient.phone }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600 text-sm">Tanggal Pemeriksaan</p>
+                    <p class="text-gray-900 font-medium">{{ appointment.examination_date|date:"d F Y H:i" }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600 text-sm">Keluhan</p>
+                    <p class="text-gray-900 font-medium">{{ appointment.notes|truncatewords:5 }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <form method="POST" class="bg-white rounded-lg shadow p-6">
+            {% csrf_token %}
+            
+            <div class="mb-6">
+                <label for="{{ form.diagnosis.id_for_label }}" class="block text-sm font-bold text-gray-900 mb-2">
+                    {{ form.diagnosis.label }}
+                </label>
+                {{ form.diagnosis }}
+                {% if form.diagnosis.errors %}
+                <div class="text-red-600 text-sm mt-2">{{ form.diagnosis.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-6">
+                <label for="{{ form.treatment.id_for_label }}" class="block text-sm font-bold text-gray-900 mb-2">
+                    {{ form.treatment.label }}
+                </label>
+                {{ form.treatment }}
+                {% if form.treatment.errors %}
+                <div class="text-red-600 text-sm mt-2">{{ form.treatment.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="flex gap-4">
+                <button type="submit" class="flex-1 px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition">
+                    Simpan Diagnosis & Pengobatan
+                </button>
+                <a href="{% url 'doctor_appointments' %}" class="flex-1 px-6 py-3 bg-gray-200 text-gray-900 font-medium rounded-lg hover:bg-gray-300 transition text-center">
+                    Batal
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

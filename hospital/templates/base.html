@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rumah Sakit Sehat Bersama</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1e40af',   // Biru gelap
+            secondary: '#0ea5e9', // Biru muda
+            accent: '#10b981',    // Hijau medis
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .hero-bg {
+      background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+    }
+  </style>
+</head>
+<body class="font-sans bg-gray-50">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <div class="flex-shrink-0 flex items-center">
+            <a href="{% url 'home' %}" class="text-2xl font-bold text-primary">🏥 RS Sehat</a>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          {% if user.is_authenticated %}
+            <!-- User Menu untuk User yang sudah login -->
+            <div class="flex items-center space-x-2">
+              <span class="text-gray-700 font-medium">{{ user.username }}</span>
+              <span class="text-gray-500 text-sm">({{ user.get_role_display }})</span>
+            </div>
+            <a href="{% url 'dashboard' %}" class="text-gray-700 hover:text-primary font-medium">Dashboard</a>
+            <a href="{% url 'profile' %}" class="text-gray-700 hover:text-primary font-medium">Profil</a>
+            <form method="post" action="{% url 'logout' %}" class="inline">
+              {% csrf_token %}
+              <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition font-medium">
+                Logout
+              </button>
+            </form>
+          {% else %}
+            <!-- Login & Register untuk user yang belum login -->
+            <a href="{% url 'login' %}" class="text-gray-700 hover:text-primary font-medium">Login</a>
+            <a href="{% url 'register_patient' %}" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition font-medium">
+              Daftar Pasien
+            </a>
+            <a href="{% url 'register_doctor' %}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition font-medium">
+              Daftar Dokter
+            </a>
+            <a href="/admin/" class="text-gray-700 hover:text-primary font-medium">Admin</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-8 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p>© 2025 Rumah Sakit Sehat Bersama. Layanan Kesehatan Terpercaya.</p>
+      <p class="mt-2 text-gray-400">Jl. Kesehatan No. 123, Jakarta | Telepon: (021) 1234-5678</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript Interaktif -->
+  <script>
+    // Smooth scroll untuk anchor
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>

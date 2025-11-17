@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section - Modern & Attractive -->
+<section class="hero-bg py-24 md:py-32">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <!-- Left Content -->
+      <div>
+        <h1 class="text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
+          Kesehatan Anda <span class="text-primary">Prioritas Kami</span>
+        </h1>
+        <p class="mt-6 text-lg text-gray-600 leading-relaxed">
+          Rumah Sakit Sehat Bersama menyediakan layanan kesehatan komprehensif dengan dokter spesialis berpengalaman dan fasilitas medis terkini.
+        </p>
+        
+        <!-- Benefits List -->
+        <div class="mt-8 space-y-3">
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">✓</span>
+            <span class="text-gray-700">50+ Dokter Spesialis Berpengalaman</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">✓</span>
+            <span class="text-gray-700">Fasilitas Medis Modern & Lengkap</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">✓</span>
+            <span class="text-gray-700">Layanan 24 Jam Setiap Hari</span>
+          </div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="mt-10 flex gap-4 flex-wrap">
+          {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="bg-primary text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-800 transition shadow-lg inline-block">
+              Ke Dashboard
+            </a>
+          {% else %}
+            <a href="{% url 'register_patient' %}" class="bg-accent text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-emerald-600 transition shadow-lg inline-block">
+              Daftar Pasien
+            </a>
+            <a href="{% url 'register_doctor' %}" class="bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition shadow-lg inline-block">
+              Daftar Dokter
+            </a>
+            <a href="{% url 'login' %}" class="border-2 border-primary text-primary px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-50 transition inline-block">
+              Login
+            </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Right Image -->
+      <div class="hidden md:block">
+        <div class="bg-gradient-to-br from-blue-100 to-green-100 rounded-2xl p-8 text-center">
+          <div class="text-9xl mb-4">🏥</div>
+          <p class="text-xl font-semibold text-gray-700">Rumah Sakit Sehat Bersama</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Fitur Layanan - Enhanced -->
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-900">Layanan Unggulan Kami</h2>
+      <p class="mt-4 text-lg text-gray-600">Kami menyediakan layanan kesehatan terbaik untuk kebutuhan Anda</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Service Card 1 -->
+      <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-2xl shadow-md hover:shadow-xl transition duration-300 border border-blue-200">
+        <div class="text-5xl mb-4">👨‍⚕️</div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Dokter Spesialis</h3>
+        <p class="text-gray-700 leading-relaxed">Lebih dari 50 dokter ahli di berbagai bidang siap memberikan pelayanan kesehatan terbaik untuk Anda.</p>
+        <ul class="mt-4 space-y-2 text-sm text-gray-600">
+          <li>✓ Kardiologi</li>
+          <li>✓ Kandungan</li>
+          <li>✓ Bedah</li>
+        </ul>
+      </div>
+
+      <!-- Service Card 2 -->
+      <div class="bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-2xl shadow-md hover:shadow-xl transition duration-300 border border-green-200">
+        <div class="text-5xl mb-4">🛏️</div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Rawat Inap Nyaman</h3>
+        <p class="text-gray-700 leading-relaxed">Kamar dengan standar internasional, layanan makan lengkap, dan perawatan 24 jam dari tenaga medis profesional.</p>
+        <ul class="mt-4 space-y-2 text-sm text-gray-600">
+          <li>✓ Kamar VIP</li>
+          <li>✓ ICU Modern</li>
+          <li>✓ Kamar Standar</li>
+        </ul>
+      </div>
+
+      <!-- Service Card 3 -->
+      <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-8 rounded-2xl shadow-md hover:shadow-xl transition duration-300 border border-orange-200">
+        <div class="text-5xl mb-4">💊</div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Apotek 24 Jam</h3>
+        <p class="text-gray-700 leading-relaxed">Stok obat lengkap dan terpercaya, tersedia kapan saja dengan resep dari dokter kami atau rujukan dari dokter lain.</p>
+        <ul class="mt-4 space-y-2 text-sm text-gray-600">
+          <li>✓ Obat Original</li>
+          <li>✓ Konsultasi Gratis</li>
+          <li>✓ Pengiriman Cepat</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Info & Statistics Section -->
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <!-- Stat 1 -->
+      <div class="text-center p-6 bg-blue-50 rounded-xl">
+        <div class="text-4xl font-bold text-primary">50+</div>
+        <p class="text-gray-700 mt-2 font-semibold">Dokter Spesialis</p>
+      </div>
+      <!-- Stat 2 -->
+      <div class="text-center p-6 bg-green-50 rounded-xl">
+        <div class="text-4xl font-bold text-accent">200+</div>
+        <p class="text-gray-700 mt-2 font-semibold">Pasien Puas</p>
+      </div>
+      <!-- Stat 3 -->
+      <div class="text-center p-6 bg-orange-50 rounded-xl">
+        <div class="text-4xl font-bold text-orange-600">24/7</div>
+        <p class="text-gray-700 mt-2 font-semibold">Layanan Non-Stop</p>
+      </div>
+      <!-- Stat 4 -->
+      <div class="text-center p-6 bg-purple-50 rounded-xl">
+        <div class="text-4xl font-bold text-purple-600">15+</div>
+        <p class="text-gray-700 mt-2 font-semibold">Tahun Berpengalaman</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Why Choose Us Section -->
+<section class="py-20 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-900">Mengapa Memilih Kami?</h2>
+      <p class="mt-4 text-lg text-gray-600">Komitmen kami adalah kesehatan dan kesejahteraan Anda</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <!-- Reason 1 -->
+      <div class="flex gap-4">
+        <div class="flex-shrink-0">
+          <div class="flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white">
+            <span class="text-xl">🏆</span>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-gray-900">Standar Akreditasi Internasional</h3>
+          <p class="mt-2 text-gray-600">Rumah sakit kami telah terakreditasi dan memenuhi standar kesehatan internasional.</p>
+        </div>
+      </div>
+
+      <!-- Reason 2 -->
+      <div class="flex gap-4">
+        <div class="flex-shrink-0">
+          <div class="flex items-center justify-center h-12 w-12 rounded-md bg-accent text-white">
+            <span class="text-xl">👨‍⚕️</span>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-gray-900">Tenaga Medis Profesional</h3>
+          <p class="mt-2 text-gray-600">Tim dokter spesialis dan tenaga medis yang berpengalaman dan terlatih.</p>
+        </div>
+      </div>
+
+      <!-- Reason 3 -->
+      <div class="flex gap-4">
+        <div class="flex-shrink-0">
+          <div class="flex items-center justify-center h-12 w-12 rounded-md bg-orange-600 text-white">
+            <span class="text-xl">🔬</span>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-gray-900">Peralatan Medis Terkini</h3>
+          <p class="mt-2 text-gray-600">Dilengkapi dengan teknologi medis terbaru untuk diagnosis dan perawatan optimal.</p>
+        </div>
+      </div>
+
+      <!-- Reason 4 -->
+      <div class="flex gap-4">
+        <div class="flex-shrink-0">
+          <div class="flex items-center justify-center h-12 w-12 rounded-md bg-purple-600 text-white">
+            <span class="text-xl">💰</span>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-gray-900">Harga Terjangkau</h3>
+          <p class="mt-2 text-gray-600">Menerima berbagai asuransi kesehatan dan paket pembayaran yang fleksibel.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-20 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-4xl font-bold mb-6">Siap untuk Merawat Kesehatan Anda?</h2>
+    <p class="text-xl mb-8 text-blue-100">Daftar sekarang dan jadilah bagian dari ribuan pasien yang telah dipercayai kami.</p>
+    <div class="flex gap-4 justify-center flex-wrap">
+      {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}" class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition">
+          Ke Dashboard
+        </a>
+      {% else %}
+        <a href="{% url 'register_patient' %}" class="bg-accent text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-emerald-600 transition">
+          Daftar Sekarang
+        </a>
+        <a href="{% url 'login' %}" class="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition">
+          Login
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Jadwal Dokter - Enhanced -->
+<section class="py-20 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-900">Jadwal Dokter Tersedia</h2>
+      <p class="mt-4 text-lg text-gray-600">Periksa ketersediaan dokter spesialis kami hari ini</p>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full bg-white rounded-xl shadow-lg overflow-hidden">
+        <thead class="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+          <tr>
+            <th class="py-4 px-6 text-left font-semibold">👨‍⚕️ Dokter</th>
+            <th class="py-4 px-6 text-left font-semibold">🏥 Spesialisasi</th>
+            <th class="py-4 px-6 text-left font-semibold">⏰ Jam Praktik</th>
+            <th class="py-4 px-6 text-left font-semibold">📊 Status</th>
+            <th class="py-4 px-6 text-center font-semibold">Aksi</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <tr class="hover:bg-gray-50 transition">
+            <td class="py-4 px-6 font-semibold text-gray-900">Dr. Andi Pratama, Sp.JP</td>
+            <td class="py-4 px-6 text-gray-700">Kardiologi (Jantung)</td>
+            <td class="py-4 px-6 text-gray-700">08:00 - 12:00</td>
+            <td class="py-4 px-6">
+              <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
+                ✓ Tersedia
+              </span>
+            </td>
+            <td class="py-4 px-6 text-center">
+              {% if user.is_authenticated %}
+                <a href="{% url 'register_patient' %}" class="text-primary hover:underline font-medium">Booking</a>
+              {% else %}
+                <a href="{% url 'login' %}" class="text-primary hover:underline font-medium">Login</a>
+              {% endif %}
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50 transition">
+            <td class="py-4 px-6 font-semibold text-gray-900">Dr. Maya Sari, Sp.OG</td>
+            <td class="py-4 px-6 text-gray-700">Kandungan & Kebidanan</td>
+            <td class="py-4 px-6 text-gray-700">09:00 - 13:00</td>
+            <td class="py-4 px-6">
+              <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
+                ✓ Tersedia
+              </span>
+            </td>
+            <td class="py-4 px-6 text-center">
+              {% if user.is_authenticated %}
+                <a href="{% url 'register_patient' %}" class="text-primary hover:underline font-medium">Booking</a>
+              {% else %}
+                <a href="{% url 'login' %}" class="text-primary hover:underline font-medium">Login</a>
+              {% endif %}
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50 transition">
+            <td class="py-4 px-6 font-semibold text-gray-900">Dr. Rudi Gunawan, Sp.B</td>
+            <td class="py-4 px-6 text-gray-700">Bedah Umum</td>
+            <td class="py-4 px-6 text-gray-700">13:00 - 17:00</td>
+            <td class="py-4 px-6">
+              <span class="inline-block bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-semibold">
+                ⚠ Segera
+              </span>
+            </td>
+            <td class="py-4 px-6 text-center">
+              {% if user.is_authenticated %}
+                <a href="{% url 'register_patient' %}" class="text-primary hover:underline font-medium">Booking</a>
+              {% else %}
+                <a href="{% url 'login' %}" class="text-primary hover:underline font-medium">Login</a>
+              {% endif %}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-8 text-center">
+      {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}" class="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition">
+          Lihat Semua Dokter
+        </a>
+      {% else %}
+        <a href="{% url 'register_patient' %}" class="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition">
+          Daftar untuk Booking
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

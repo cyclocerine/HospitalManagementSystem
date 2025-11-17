@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block title %}Konfirmasi Appointment{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8 px-4">
+    <div class="max-w-6xl mx-auto">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Konfirmasi Appointment</h1>
+            <p class="text-gray-600 mt-2">Kelola dan konfirmasi appointment pasien Anda</p>
+        </div>
+
+        {% if messages %}
+        <div class="mb-6">
+            {% for message in messages %}
+            <div class="p-4 rounded-lg {% if message.tags %}bg-{{ message.tags }}-50 text-{{ message.tags }}-800 border border-{{ message.tags }}-200{% else %}bg-blue-50 text-blue-800 border border-blue-200{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Search Bar -->
+        <form method="GET" class="mb-6 bg-white rounded-lg shadow p-4">
+            <div class="flex gap-2">
+                <input type="text" name="search" value="{{ search_query }}" 
+                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    placeholder="Cari nama pasien...">
+                <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    Cari
+                </button>
+                {% if search_query %}
+                <a href="{% url 'doctor_appointments' %}" class="px-6 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-gray-300">
+                    Reset
+                </a>
+                {% endif %}
+            </div>
+        </form>
+
+        <!-- Tabs -->
+        <div class="bg-white rounded-lg shadow mb-6">
+            <div class="flex border-b">
+                <a href="#pending" class="flex-1 px-6 py-4 border-b-2 border-blue-500 text-blue-600 font-medium">
+                    Menunggu Konfirmasi ({{ pending_count }})
+                </a>
+                <a href="#confirmed" class="flex-1 px-6 py-4 border-b border-gray-200 text-gray-600 hover:text-gray-900">
+                    Terkonfirmasi ({{ confirmed_appointments.count }})
+                </a>
+                <a href="#rejected" class="flex-1 px-6 py-4 border-b border-gray-200 text-gray-600 hover:text-gray-900">
+                    Ditolak ({{ rejected_appointments.count }})
+                </a>
+            </div>
+        </div>
+
+        <!-- Pending Appointments -->
+        <div id="pending" class="mb-8">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Appointment Menunggu Konfirmasi</h2>
+            {% if pending_appointments %}
+            <div class="grid gap-4 mb-6">
+                {% for appointment in pending_appointments %}
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">{{ appointment.patient.name }}</h3>
+                            <p class="text-gray-600 text-sm">{{ appointment.examination_date|date:"d F Y" }} - {{ appointment.examination_time }}</p>
+                        </div>
+                        <a href="{% url 'confirm_appointment' appointment.id %}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            Konfirmasi
+                        </a>
+                    </div>
+                    <div class="space-y-2 text-sm">
+                        <p><span class="text-gray-600">Telepon:</span> {{ appointment.patient.phone }}</p>
+                        <p><span class="text-gray-600">Keluhan:</span> {{ appointment.notes }}</p>
+                        <p><span class="text-gray-600">Dibuat pada:</span> {{ appointment.created_at|date:"d F Y H:i" }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <div class="flex justify-center items-center gap-2 mt-6">
+                {% if page_obj.has_previous %}
+                <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}" class="px-3 py-2 border rounded hover:bg-gray-100">First</a>
+                <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" class="px-3 py-2 border rounded hover:bg-gray-100">← Prev</a>
+                {% endif %}
+                
+                {% for num in paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <span class="px-3 py-2 bg-blue-600 text-white rounded">{{ num }}</span>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}" class="px-3 py-2 border rounded hover:bg-gray-100">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" class="px-3 py-2 border rounded hover:bg-gray-100">Next →</a>
+                <a href="?page={{ paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}" class="px-3 py-2 border rounded hover:bg-gray-100">Last</a>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="bg-gray-50 rounded-lg p-8 text-center">
+                <p class="text-gray-600">Tidak ada appointment yang menunggu konfirmasi</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Confirmed Appointments -->
+        <div id="confirmed" class="mb-8">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Appointment Terkonfirmasi</h2>
+            {% if confirmed_appointments %}
+            <div class="grid gap-4">
+                {% for appointment in confirmed_appointments %}
+                <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">{{ appointment.patient.name }}</h3>
+                            <p class="text-gray-600 text-sm">{{ appointment.examination_date|date:"d F Y" }} - {{ appointment.examination_time }}</p>
+                            <span class="inline-block mt-2 px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                                ✓ Terkonfirmasi
+                            </span>
+                        </div>
+                        {% if appointment.status != 'completed' %}
+                        <a href="{% url 'add_diagnosis' appointment.id %}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                            Tambah Diagnosis
+                        </a>
+                        {% else %}
+                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded">
+                            Selesai
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="bg-gray-50 rounded-lg p-8 text-center">
+                <p class="text-gray-600">Belum ada appointment yang dikonfirmasi</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Rejected Appointments -->
+        <div id="rejected" class="mb-8">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Appointment Ditolak</h2>
+            {% if rejected_appointments %}
+            <div class="grid gap-4">
+                {% for appointment in rejected_appointments %}
+                <div class="bg-white rounded-lg shadow p-6 border-l-4 border-red-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">{{ appointment.patient.name }}</h3>
+                            <p class="text-gray-600 text-sm">{{ appointment.examination_date|date:"d F Y" }} - {{ appointment.examination_time }}</p>
+                            <p class="text-red-600 text-sm mt-2"><strong>Alasan:</strong> {{ appointment.rejection_reason }}</p>
+                        </div>
+                        <span class="px-3 py-1 bg-red-100 text-red-800 text-sm font-medium rounded">
+                            Ditolak
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="bg-gray-50 rounded-lg p-8 text-center">
+                <p class="text-gray-600">Tidak ada appointment yang ditolak</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

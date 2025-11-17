@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <div class="flex justify-between items-start">
+            <div>
+                <h1 class="text-4xl font-bold text-gray-900">Halo, Dr. {{ doctor.name }}</h1>
+                <p class="text-gray-600 mt-2">Spesialis: <span class="font-semibold">{{ doctor.specialty }}</span></p>
+                <p class="text-gray-600">Unit: <span class="font-semibold">{{ doctor.unit }}</span></p>
+            </div>
+            <div class="text-right">
+                <p class="text-sm text-gray-500">Waktu: <span id="current-time"></span></p>
+                <a href="/accounts/logout/" class="mt-4 inline-block bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistik Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500 shadow">
+            <h3 class="text-gray-600 text-sm font-semibold">Total Pasien</h3>
+            <p class="text-4xl font-bold text-blue-600 mt-2">{{ total_patients }}</p>
+            <p class="text-xs text-gray-500 mt-2">Pasien yang pernah ditangani</p>
+        </div>
+        
+        <div class="bg-green-50 p-6 rounded-lg border-l-4 border-green-500 shadow">
+            <h3 class="text-gray-600 text-sm font-semibold">Rekam Medis</h3>
+            <p class="text-4xl font-bold text-green-600 mt-2">{{ total_records }}</p>
+            <p class="text-xs text-gray-500 mt-2">Total kunjungan pasien</p>
+        </div>
+        
+        <div class="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500 shadow">
+            <h3 class="text-gray-600 text-sm font-semibold">Jadwal Hari Ini</h3>
+            <p class="text-4xl font-bold text-yellow-600 mt-2">{{ today_schedule|length }}</p>
+            <p class="text-xs text-gray-500 mt-2">Sesi praktik hari ini</p>
+        </div>
+        
+        <div class="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500 shadow">
+            <h3 class="text-gray-600 text-sm font-semibold">Email</h3>
+            <p class="text-sm font-semibold text-purple-600 mt-2">{{ doctor.email }}</p>
+            <p class="text-xs text-gray-500 mt-2">{{ doctor.phone }}</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Content -->
+        <div class="lg:col-span-2 space-y-8">
+            <!-- Jadwal Hari Ini -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Jadwal Praktik Hari Ini</h2>
+                    <span class="text-xs bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-semibold">
+                        {{ today|date:"d M Y" }}
+                    </span>
+                </div>
+                
+                {% if today_schedule %}
+                <div class="space-y-3">
+                    {% for schedule in today_schedule %}
+                    <div class="border-l-4 border-blue-500 bg-gray-50 p-4 rounded hover:shadow transition">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="font-semibold text-gray-900">{{ schedule.examination_time|time:"H:i" }} WIB</p>
+                                <p class="text-sm text-gray-600 mt-1">Pemeriksaan rutin</p>
+                            </div>
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Terjadwal</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-8">
+                    <p class="text-gray-500">Tidak ada jadwal untuk hari ini</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Rekam Medis Terbaru -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Rekam Medis Terbaru</h2>
+                
+                {% if recent_records %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Tanggal</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Pasien</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Diagnosis</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            {% for record in recent_records %}
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-4 py-3 text-sm text-gray-600">{{ record.examination_date|date:"d/m/Y" }}</td>
+                                <td class="px-4 py-3">
+                                    <p class="font-medium text-gray-900">{{ record.patient.name }}</p>
+                                    <p class="text-xs text-gray-500">{{ record.patient.phone }}</p>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-600">{{ record.diagnosis|default:"--" }}</td>
+                                <td class="px-4 py-3 text-sm">
+                                    <a href="/admin/core/medicalrecord/{{ record.id }}/change/" class="text-blue-600 hover:text-blue-900 font-medium">
+                                        Edit
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-8">
+                    <p class="text-gray-500">Belum ada rekam medis</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Resep Terbaru -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Resep Terbaru</h2>
+                
+                {% if recent_prescriptions %}
+                <div class="space-y-4">
+                    {% for prescription in recent_prescriptions %}
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow transition">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="font-semibold text-gray-900">{{ prescription.medicine.name }}</p>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    Pasien: <span class="font-medium">{{ prescription.medical_record.patient.name }}</span>
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                    Dosis: <span class="font-medium">{{ prescription.dosage }}</span>
+                                </p>
+                            </div>
+                            <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                                {{ prescription.prescription_date|date:"d/m/Y" }}
+                            </span>
+                        </div>
+                        {% if prescription.notes %}
+                        <p class="text-sm text-gray-600 mt-3 italic">Catatan: {{ prescription.notes }}</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-8">
+                    <p class="text-gray-500">Belum ada resep</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-8">
+            <!-- Jadwal Minggu Ini -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Jadwal Minggu Ini</h3>
+                
+                {% if week_schedule %}
+                <div class="space-y-2">
+                    {% for schedule in week_schedule %}
+                    <div class="bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-500 p-3 rounded">
+                        <p class="text-sm font-semibold text-gray-900">
+                            {{ schedule.examination_date|date:"ddd, d M" }}
+                        </p>
+                        <p class="text-xs text-gray-600 mt-1">{{ schedule.examination_time|time:"H:i" }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-gray-500 text-center py-4">Tidak ada jadwal minggu ini</p>
+                {% endif %}
+            </div>
+
+            <!-- Info Dokter -->
+            <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg shadow-lg p-6 border border-blue-200">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Informasi Praktek</h3>
+                <div class="space-y-3 text-sm">
+                    <div class="bg-white rounded p-3">
+                        <p class="text-gray-600">Nomor SIP</p>
+                        <p class="font-semibold text-gray-900">{{ doctor.sip_number|default:"--" }}</p>
+                    </div>
+                    <div class="bg-white rounded p-3">
+                        <p class="text-gray-600">Nomor STR</p>
+                        <p class="font-semibold text-gray-900">{{ doctor.str_number|default:"--" }}</p>
+                    </div>
+                    <div class="bg-white rounded p-3">
+                        <p class="text-gray-600">Posisi</p>
+                        <p class="font-semibold text-gray-900">{{ doctor.position }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Aksi Cepat</h3>
+                <div class="space-y-3">
+                    <a href="{% url 'doctor:patient_list' %}" class="block w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition text-center font-medium">
+                        👥 Daftar Pasien
+                    </a>
+                    <a href="{% url 'doctor:appointments' %}" class="block w-full bg-cyan-600 text-white py-2 rounded-lg hover:bg-cyan-700 transition text-center font-medium">
+                        📋 Janji Temu
+                    </a>
+                    <a href="/admin/core/medicalrecord/add/" class="block w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition text-center font-medium">
+                        + Rekam Medis Baru
+                    </a>
+                    <a href="/admin/core/prescription/add/" class="block w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition text-center font-medium">
+                        + Resep Baru
+                    </a>
+                    <a href="/admin/" class="block w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition text-center font-medium">
+                        Lihat Admin Panel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Update waktu real-time
+    function updateTime() {
+        const now = new Date();
+        const options = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            timeZone: 'Asia/Jakarta'
+        };
+        const formatter = new Intl.DateTimeFormat('id-ID', options);
+        document.getElementById('current-time').textContent = formatter.format(now);
+    }
+    
+    updateTime();
+    setInterval(updateTime, 1000);
+</script>
+{% endblock %}
