@@ -81,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'rumah_sakit',
         'USER': 'root',
-        'PASSWORD': 'kxkv87s8',
+        'PASSWORD': '',
         'HOST': 'dbprovider.ap-southeast-1.clawcloudrun.com',
         'PORT': '40253',
         'OPTIONS': {
