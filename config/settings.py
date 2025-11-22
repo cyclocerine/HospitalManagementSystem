@@ -82,8 +82,8 @@ DATABASES = {
         'NAME': 'rumah_sakit',
         'USER': 'root',
         'PASSWORD': '',
-        'HOST': 'dbprovider.ap-southeast-1.clawcloudrun.com',
-        'PORT': '40253',
+        'HOST': 'localhost',
+        'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'charset': 'utf8mb4',

@@ -46,7 +46,8 @@ class Payment(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"INV-{self.invoice_number} | {self.patient.name} - Rp{self.amount:,.0f}"
+        patient_name = self.patient.name if self.patient else "Unknown Patient"
+        return f"INV-{self.invoice_number} | {patient_name} - Rp{self.amount:,.0f}"
     
     @property
     def remaining_amount(self):
