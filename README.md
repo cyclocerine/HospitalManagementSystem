@@ -384,9 +384,8 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 
 ## 👥 Authors
 
-- **Development Team** - Hospital Management System Contributors
+- **Development** - cyclocerine
 - **Framework**: Django
-- **Organization**: Healthcare Technology Division
 
 ## 🙏 Acknowledgments
 
@@ -448,8 +447,3 @@ For support, issues, or questions:
 
 ---
 
-**Last Updated**: November 2025  
-**Status**: Production Ready ✅  
-**Maintainer**: Healthcare Technology Team
-
-For more information, visit [Project Wiki](#) or contact the development team.
